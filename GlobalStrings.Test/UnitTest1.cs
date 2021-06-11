@@ -48,10 +48,10 @@ namespace GlobalStrings.Test
             languagePtBr.textLangBook.Add(0, "Olá");
             languagePtBr.textLangBook.Add(1, "Seja Bem-Vindo");
 
-            LanguageInfo<string, int> languageEn = new("en");
-            languageEn.textLangBook = new();
-            languageEn.textLangBook.Add(0, "Hello");
-            languageEn.textLangBook.Add(1, "Wellcome");
+            LanguageInfo<string, int> languageEn = new("en", new Dictionary<int, string>() {
+                { 0, "Hello" },
+                { 1, "Wellcome" }
+            });
 
             List<LanguageInfo<string, int>> languageInfos = new(){languagePtBr, languageEn};
 
