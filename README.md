@@ -4,6 +4,17 @@
 ## Dependencies
 - .NET 5
 
+## Installation
+### PM
+```
+Install-Package GlobalStrings -Version 0.0.3
+```
+### .NET CLI
+```
+dotnet add package GlobalStrings --version 0.0.3
+```
+See also in [Nuget Packages](https://www.nuget.org/packages/GlobalStrings)
+
 ## Simple example:
 ```csharp
 using System.Collections.Generic;
