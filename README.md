@@ -52,7 +52,7 @@ private void Globalization_LangTextObserver(object sender, UpdateModeEventArgs u
 }
 ```
 # Globalization
-This is who will manage the existing LanguageInfo and passed as a parameter in the Globalization constructor.
+This is who will manage the existing [LanguageInfo](#languageinfo) and passed as a parameter in the Globalization constructor.
 There are two types of Globalization:
 ```csharp
 Globalization(List<LanguageInfo<TLangCode, KTextCode>> languagesInfo, TLangCode langCodeNow) // 1
@@ -114,6 +114,7 @@ LanguageInfo<string, int> languageEn = new("en", new Dictionary<int, string>() {
 ### LanguageInfo.textLangBook
 For each LanguageInfo you must have a textLangBook containing all the strings you will use for that language.
 Also, the codes assigned to the strings must be the same in their translations in other languages.
+
 Ex:
 ```csharp
 LanguageInfo<string, int> languageEn = new("en"); //English
@@ -141,6 +142,16 @@ private void Globalization_LangTextObserver(object sender, UpdateModeEventArgs u
 The parameter that is passed to SetText is the text code defined in ``` LanguageInfo.textLangBook ```
 After that, you can call [StartGlobalization](#startglobalization) to assign
 
+### UpdateModeEventArgs
+With this you can get information about the string assignment mode and the language, either by update (``` Update ```) or first startup (``` Insert ```).
+```csharp
+public sealed class UpdateModeEventArgs : EventArgs
+{
+   public UpdateMode mode { get; set; }
+   public dynamic lang {get; internal set;}
+}
+```
+
 # UpdateLang
 This method is used to update strings in LangTextObserver, using the code defined in any LanguageInfo.
 ```csharp
@@ -149,4 +160,4 @@ globalization.UpdateLang("en");
 
 # Exemples
 - You can see the simple implementation example on the [top of the README](#simple-example)
-- See also the sample project by [clicking here](https://github.com/LuanRoger/GlobalStrings/tree/main/GlobalStrings.Sample)
+- See also the sample project created in WinForms by [clicking here](https://github.com/LuanRoger/GlobalStrings/tree/main/GlobalStrings.Sample)
