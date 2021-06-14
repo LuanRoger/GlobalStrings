@@ -1,6 +1,11 @@
 <h1 align="center">GlobalStrings</h1>
 <h3 align="center">Simple package that helps manage strings for implementing new languages in .NET applications</h3>
 
+<p>
+   <img src="https://img.shields.io/nuget/v/GlobalStrings">
+   <img src="https://img.shields.io/nuget/dt/GlobalStrings">
+<p/>
+
 ## Dependencies
 - .NET 5
 
@@ -160,6 +165,18 @@ public sealed class UpdateModeEventArgs : EventArgs
 {
    public UpdateMode mode { get; set; }
    public dynamic lang {get; internal set;}
+}
+```
+
+With this you can also adjust the size of controls according to the language in applications with UI:
+```csharp
+private void Form1_LangTextObserver(object sender, UpdateModeEventArgs updateModeEventArgs)
+{
+   btnSizeDemo.Size = updateModeEventArgs.lang switch
+   {
+      "pt_br" => new Size(200, 23),
+      "en" => new Size(190, 23)
+   };
 }
 ```
 
