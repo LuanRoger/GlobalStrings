@@ -12,11 +12,11 @@
 ## Installation
 ### PM
 ```
-Install-Package GlobalStrings -Version 0.0.3
+Install-Package GlobalStrings
 ```
 ### .NET CLI
 ```
-dotnet add package GlobalStrings --version 0.0.3
+dotnet add package GlobalStrings
 ```
 See also in [Nuget Packages](https://www.nuget.org/packages/GlobalStrings)
 
