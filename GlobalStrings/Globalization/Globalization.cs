@@ -11,7 +11,7 @@ namespace GlobalStrings
     /// </summary>
     /// <typeparam name="TLangCode">Defines the type used to identify <c>LanguageInfo<TLangCode, KTextCode></c>.</typeparam>
     /// <typeparam name="KTextCode">Defines the type used to identify the strings in <c>LanguageInfo<...>.textBook</c></typeparam>
-    public class Globalization<TLangCode, KTextCode>
+    public partial class Globalization<TLangCode, KTextCode>
     {
         [NotNull]
         private TLangCode langCodeNow { get; set;}
@@ -78,25 +78,16 @@ namespace GlobalStrings
             LangTextObserverCall(this, new UpdateModeEventArgs {mode = UpdateMode.Insert, lang = langCodeNow});
         }
 
-        public delegate void LangTextObserverEventHandler(object sender, UpdateModeEventArgs updateModeEventArgs);
-
         /// <summary>
-        /// This event is called every time the language is changed or <c>StartGlobalization</c> is called, updating all strings.
+        /// Call <c>LangTextObserver</c> to synchronize all strings with current language.
         /// </summary>
-        public virtual event LangTextObserverEventHandler LangTextObserver;
-
-        /// <summary>
-        /// Groups all strings to respond to language changes.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="updateModeEventArgs">Provides properties about language changes at runtime</param>
-        private void LangTextObserverCall(object sender, UpdateModeEventArgs updateModeEventArgs)
+        public void SyncStrings()
         {
             if(!hasStarted)
             {
                 throw new StopedGlobalizationExeption(ExeptionsMessages.STOPED_GLOBALIZATION_EXEPTION_MESSAGE);
             }
-            LangTextObserver?.Invoke(sender, updateModeEventArgs);
+            LangTextObserverCall(this, new UpdateModeEventArgs {mode = UpdateMode.Sync, lang = langCodeNow});
         }
     }
 
@@ -104,7 +95,7 @@ namespace GlobalStrings
     /// Class that help with language string management.
     /// This class cannot be used with <c>LanguageInfo<...></c>
     /// </summary>
-    public class Globalization
+    public partial class Globalization
     {
         [NotNull]
         private int langCodeNow { get; set;}
@@ -172,25 +163,16 @@ namespace GlobalStrings
             LangTextObserverCall(this, new UpdateModeEventArgs {mode = UpdateMode.Insert, lang = langCodeNow});
         }
 
-        public delegate void LangTextObserverEventHandler(object sender, UpdateModeEventArgs updateModeEventArgs);
-
         /// <summary>
-        /// This event is called every time the language is changed or <c>StartGlobalization</c> is called, updating all strings.
+        /// Call <c>LangTextObserver</c> to synchronize all strings with current language.
         /// </summary>
-        public virtual event LangTextObserverEventHandler LangTextObserver;
-
-        /// <summary>
-        /// Groups all strings to respond to language changes.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="updateModeEventArgs">Provides properties about language changes at runtime</param>
-        private void LangTextObserverCall(object sender, UpdateModeEventArgs updateModeEventArgs)
+        public void SyncStrings()
         {
             if(!hasStarted)
             {
                 throw new StopedGlobalizationExeption(ExeptionsMessages.STOPED_GLOBALIZATION_EXEPTION_MESSAGE);
             }
-            LangTextObserver?.Invoke(sender, updateModeEventArgs);
+            LangTextObserverCall(this, new UpdateModeEventArgs {mode = UpdateMode.Sync, lang = langCodeNow});
         }
     }
 }

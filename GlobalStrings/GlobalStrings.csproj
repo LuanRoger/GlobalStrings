@@ -3,22 +3,25 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <PackageId>GlobalStrings</PackageId>
-    <Version>0.0.4</Version>
+    <Version>0.0.5</Version>
     <License>MIT</License>
     <Authors>Luan Roger</Authors>
     <PackageDescription>Implement new languages easily.</PackageDescription>
-    <Description>
-      Implement new languages easily.
-    </Description>
+    <Description>Implement new languages easily.</Description>
     <RepositoryUrl>https://github.com/LuanRoger/GlobalStrings</RepositoryUrl>
     <PackageProjectUrl>https://github.com/LuanRoger/GlobalStrings</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>Languages</PackageTags>
     <Title>Global Strings</Title>
     <Summary>Simple package that helps manage strings for implementing new languages in .NET applications</Summary>
-    <ReleaseNotes>
-      - Improved error handling.
-    </ReleaseNotes>
+    <ReleaseNotes>- Improved error handling.</ReleaseNotes>
+    <PackageReleaseNotes>Features:
+- Method to synchronize strings implemented.
+- Native global instance implemented.
+- Globalization is clonable.
+Corrections:
+- Refactoring in code.
+- More tests added.</PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>
