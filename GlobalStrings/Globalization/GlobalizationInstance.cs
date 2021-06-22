@@ -10,7 +10,7 @@ namespace GlobalStrings
         /// Get the global instance of <c>Globalization</c>
         /// </summary>
         /// <returns><c>Globalization</c> instance</returns>
-        public static Globalization<TLangCode, KTextCode, GCollectionCode> GetGlobalizaztionInstance() => globalizationInstance;
+        public static Globalization<TLangCode, KTextCode, GCollectionCode> GetGlobalizationInstance() => globalizationInstance;
 
         /// <summary>
         /// Set the global instance of <c>Globalization</c>

@@ -7,30 +7,28 @@ using GlobalStrings;
 
 namespace GlobalStrings.Sample.Strings
 {
-    public class Languages
+    public static class Languages
     {
-        public LanguageInfo<string, int> ptBr { get; set; }
-        public LanguageInfo<string, int> en {get; set;}
-        public List<LanguageInfo<string, int>> languageList { get {
-                return new List<LanguageInfo<string, int>> {ptBr, en};
-            }
-        }
-
-        public Languages()
+        public static void Init()
         {
-            ptBr = new("pt_br");
-            Dictionary<int, string> ptBrDictionary = new();
-            ptBrDictionary.Add(0, "Olá");
-            ptBrDictionary.Add(1, "Mudar idioma");
-            ptBrDictionary.Add(2, "Esse botão muda seu tamanho");
-            ptBr.textLangBook = ptBrDictionary;
+            LanguageInfo<string, int, string> ptBr = new("pt_br");
+            ptBr.textBookCollection = new();
+            ptBr.textBookCollection.Add("Home", new Dictionary<int, string>());
+            ptBr.textBookCollection["Home"].Add(0, "Olá");
+            ptBr.textBookCollection["Home"].Add(1, "Mudar idioma");
+            ptBr.textBookCollection["Home"].Add(2, "Esse botão muda seu tamanho");
 
-            en = new("en");
-            Dictionary<int, string> enDictionary = new();
-            enDictionary.Add(0, "Hello");
-            enDictionary.Add(1, "Change language");
-            enDictionary.Add(2, "This button changes its size");
-            en.textLangBook = enDictionary;
-        }
+            LanguageInfo<string, int, string> en = new("en");
+            en.textBookCollection = new();
+            en.textBookCollection.Add("Home", new Dictionary<int, string>());
+            en.textBookCollection["Home"].Add(0, "Hello");
+            en.textBookCollection["Home"].Add(1, "Change language");
+            en.textBookCollection["Home"].Add(2, "This button changes its size");
+            
+            List<LanguageInfo<string, int, string>> languageList = new() {ptBr, en};
+
+            Globalization<string, int, string>
+            .SetGlobalizationInstance(new Globalization<string, int, string>(languageList, "pt_br"));
+        }       
     }
 }
