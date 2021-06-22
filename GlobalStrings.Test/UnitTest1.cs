@@ -5,7 +5,7 @@ namespace GlobalStrings.Test
 {
     public class UnitTest1
     {
-        Globalization<string, int> globalization;
+        Globalization<string, int, int> globalization;
 
         private string congrats;
         private string wellcome;
@@ -43,19 +43,20 @@ namespace GlobalStrings.Test
 
         private void StartGlobalization()
         {
-            LanguageInfo<string, int> languagePtBr = new("pt_br");
+            LanguageInfo<string, int, int> languagePtBr = new("pt_br");
             languagePtBr.textLangBook = new();
             languagePtBr.textLangBook.Add(0, "Olá");
             languagePtBr.textLangBook.Add(1, "Seja Bem-Vindo");
 
-            LanguageInfo<string, int> languageEn = new("en", new Dictionary<int, string>() {
+            LanguageInfo<string, int, int> languageEn = new("en", new Dictionary<int, string>() {
                 { 0, "Hello" },
                 { 1, "Wellcome" }
             });
 
-            List<LanguageInfo<string, int>> languageInfos = new(){languagePtBr, languageEn};
+            List<LanguageInfo<string, int, int>> languageInfos = new(){languagePtBr, languageEn};
 
             globalization = new(languageInfos, "pt_br");
+            globalization.useTextLangBook = true;
             globalization.LangTextObserver += Globalization_LangTextObserver;
 
             globalization.StartGlobalization();

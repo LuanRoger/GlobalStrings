@@ -2,10 +2,10 @@
 
 namespace GlobalStrings
 {
-    public enum UpdateMode {Update, Insert}
+    public enum UpdateMode {Update, Insert, Sync}
     public sealed class UpdateModeEventArgs : EventArgs
     {
-        public UpdateMode mode { get; set; }
-        public dynamic lang {get; internal set;}
+        public UpdateMode mode { get; internal init; }
+        public dynamic lang {get; internal init;}
     }
 }

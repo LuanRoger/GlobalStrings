@@ -25,8 +25,9 @@ See also in [Nuget Packages](https://www.nuget.org/packages/GlobalStrings)
 using System.Collections.Generic;
 using GlobalStrings;
 
-Globalization<string, int> globalization;
+Globalization<int, int, int> globalization;
 private string congrats;
+private string exit;
 private string wellcome;
 
 public void ChangeLanguageTest()
@@ -35,7 +36,7 @@ public void ChangeLanguageTest()
    Assert.Equal("Olá", congrats);
    Assert.Equal("Seja Bem-Vindo", wellcome);
 
-   globalization.UpdateLang("en");
+   globalization.UpdateLang(1);
 
    Assert.Equal("Hello", congrats);
    Assert.Equal("Wellcome", wellcome);
@@ -43,19 +44,25 @@ public void ChangeLanguageTest()
 
 private void Start()
 {
-   LanguageInfo<string, int> languagePtBr = new("pt_br");
-   languagePtBr.textLangBook = new();
-   languagePtBr.textLangBook.Add(0, "Olá");
-   languagePtBr.textLangBook.Add(1, "Seja Bem-Vindo");
+   LanguageInfo<int, int, int> languagePtBr = new(0);
+   languagePtBr.textBookCollection = new();
+   languagePtBr.textBookCollection.Add(0, new Dictionary<int, string>());
+   languagePtBr.textBookCollection.Add(1, new Dictionary<int, string>());
+   languagePtBr.textBookCollection[0].Add(0, "Olá");
+   languagePtBr.textBookCollection[1].Add(0, "Seja Bem-Vindo");
+   languagePtBr.textBookCollection[1].Add(1, "Sair");
 
-   LanguageInfo<string, int> languageEn = new("en");
-   languageEn.textLangBook = new();
-   languageEn.textLangBook.Add(0, "Hello");
-   languageEn.textLangBook.Add(1, "Wellcome");
+   LanguageInfo<int, int, int> languageEn = new(1);
+   languageEn.textBookCollection = new();
+   languageEn.textBookCollection.Add(0, new Dictionary<int, string>());
+   languageEn.textBookCollection.Add(1, new Dictionary<int, string>());
+   languageEn.textBookCollection[0].Add(0, "Hello");
+   languageEn.textBookCollection[1].Add(0, "Wellcome");
+   languageEn.textBookCollection[1].Add(1, "Exit");
 
-   List<LanguageInfo<string, int>> languageInfos = new(){languagePtBr, languageEn};
+   List<LanguageInfo<int, int, int>> languageInfos = new(){languagePtBr, languageEn};
 
-   globalization = new(languageInfos, "pt_br");
+   globalization = new(languageInfos, 0);
    globalization.LangTextObserver += Globalization_LangTextObserver;
 
    globalization.StartGlobalization();
@@ -63,29 +70,21 @@ private void Start()
 
 private void Globalization_LangTextObserver(object sender, UpdateModeEventArgs updateModeEventArgs)
 {
-   congrats = globalization.SetText(0);
-   wellcome = globalization.SetText(1);
+   congrats = globalization.SetText(0, 0);
+   wellcome = globalization.SetText(1, 0);
+   exit = globalization.SetText(1, 1);
 }
 ```
 # Globalization
 This is who will manage the existing [LanguageInfo](#languageinfo) and passed as a parameter in the Globalization constructor.
-There are two types of Globalization:
 ```csharp
-Globalization(List<LanguageInfo<TLangCode, KTextCode>> languagesInfo, TLangCode langCodeNow) // 1
-Globalization(List<LanguageInfo> languagesInfo, int langCodeNow) // 2
+Globalization(List<LanguageInfo<TLangCode, KTextCode, GCollectionCode>> languagesInfo, TLangCode langCodeNow)
 ```
-The first can be used with generic types, the second must be used with specific types.
-
-- ``` List<LanguageInfo<TLangCode, KTextCode>> languagesInfo ``` <- List of all existing LanguageInfo.
-  - ``` List<LanguageInfo> languagesInfo ``` <- Its non-generic variation.
-
-- ``` TLangCode langCodeNow ``` <- Current language code, defined in any LanguageInfo
-  - ``` int langCodeNow ``` <- Its non-generic variation.
 
 To instantiate it you will need to have at least a List with at least two [LanguageInfo](#languageinfo), so:
 ```csharp
-List<LanguageInfo<string, int>> languageInfos = new(){languagePtBr, languageEn};
-globalization = new(languageInfos, "pt_br");
+List<LanguageInfo<int, int, int>> languageInfos = new(){languagePtBr, languageEn};
+globalization = new(languageInfos, 0);
 ```
 
 ### StartGlobalization
@@ -95,49 +94,61 @@ globalization.StartGlobalization();
 ```
 > This alone will not work, if you want to skip other concepts [click here](#langtextobserver-and-settext)
 
-### TLangCode, KTextCode and non-generic
-TLangCode and KTextCode are used to identify language and text respectively, therefore, the types of Globalization<T, K> must be equal to LanguageInfo<T, K>.
+### TLangCode, KTextCode and GCollectionCode
+TLangCode, KTextCode and GCollectionCode are used to identify language, text and collection respectively, therefore, the types of Globalization<T, K, G> must be equal to LanguageInfo<T, K, G>.
 
 Then:
 ```csharp
-Globalization<string, int> globalization;
-LanguageInfo<string, int> languagePtBr;
+Globalization<string, int, int> globalization;
+LanguageInfo<string, int, int> languagePtBr;
 ```
-
-The LanguageInfo and Globalization class use ``` int ``` to identify the language and text/string.
+Even if you are not going to use collections, you must define a type for it.
 
 # LanguageInfo
 This is the class that will contain the information about the language, including the code and strings.
 Like Globalization, LanguageInfo also has two types, one accepting generics and the other not:
 ```csharp
-LanguageInfo<TLangCode, KTextCode>
-LanguageInfo
+LanguageInfo<TLangCode, KTextCode, GCollectionCode>
 ```
-> See section above for [more information](#tlangcode-ktextcode-and-non-generic).
+> See section above for [more information](#tlangcode-ktextcode-and-gcollectioncode).
 
-LanguageInfo can be instantiated with just the language code, but at some point you must assign a new ``` Dictionary ``` to ``` textLangBook ```:
+LanguageInfo can be instantiated with just the language code, but at some point you must assign a new ``` TextBookCollection<T, K, G> ``` or ``` Dictionary ``` to ``` textLangBook ```:
 ```csharp
-LanguageInfo<string, int> languageEn = new("en");
-languageEn.textLangBook = new();
-languageEn.textLangBook.Add(0, "Hello");
-languageEn.textLangBook.Add(1, "Wellcome");
+LanguageInfo<int, int, int> languageEn = new(1);
+languageEn.textBookCollection = new();
+languageEn.textBookCollection.Add(0, new Dictionary<int, string>());
+languageEn.textBookCollection.Add(1, new Dictionary<int, string>());
+languageEn.textBookCollection[0].Add(0, "Hello");
+languageEn.textBookCollection[1].Add(0, "Wellcome");
+languageEn.textBookCollection[1].Add(1, "Exit");
+
 // OR
-LanguageInfo<string, int> languageEn = new("en", new Dictionary<int, string>() {
+
+LanguageInfo<int, int> languageEn = new(1, new Dictionary<int, string>() {
    { 0, "Hello" },
    { 1, "Wellcome" }
 });
 ```
-### LanguageInfo.textLangBook
-For each LanguageInfo you must have a textLangBook containing all the strings you will use for that language.
-Also, the codes assigned to the strings must be the same in their translations in other languages.
-
+### LanguageInfo.TextBookCollection<T, K, G>
+For each LanguageInfo you must have a TextBookCollection containing all the string collections you will use for that language.
+Also, the codes assigned to string collections must be the same in their translations in other languages.
 Ex:
 ```csharp
-LanguageInfo<string, int> languageEn = new("en"); //English
+LanguageInfo<int, int, int> languagePtBr = new(0);
+languagePtBr.textBookCollection = new();
+languagePtBr.textBookCollection.Add(0, new Dictionary<int, string>());
+languagePtBr.textBookCollection[0].Add(0, "Olá");
+
+//OR
+
+// This example uses textLangBook, which is currently deprecated.
+// The difference is that it stores all strings without a division by collections,
+// it's like a single collection to store all application strings
+LanguageInfo<string, int> languageEn = new("en");
 languageEn.textLangBook = new();
 languageEn.textLangBook.Add(0, "Hello");
 
-LanguageInfo<string, int> languagePtBr = new("pt_br"); // Portuguese
+LanguageInfo<string, int> languagePtBr = new("pt_br");
 languagePtBr.textLangBook = new();
 languagePtBr.textLangBook.Add(0, "Olá");
 ```
@@ -151,12 +162,17 @@ globalization.LangTextObserver += Globalization_LangTextObserver;
 
 private void Globalization_LangTextObserver(object sender, UpdateModeEventArgs updateModeEventArgs)
 {
+   congrats = globalization.SetText(0, 0);
+   wellcome = globalization.SetText(1, 0);
+   
+   //OR
+   
    congrats = globalization.SetText(0);
    wellcome = globalization.SetText(1);
 }
 ```
-The parameter that is passed to SetText is the text code defined in ``` LanguageInfo.textLangBook ```
-After that, you can call [StartGlobalization](#startglobalization) to assign
+The parameter that is passed to SetText is the text code defined in ``` LanguageInfo.TextBookCollection ``` or ``` LanguageInfo.textLangBook ```
+After that, you can call [StartGlobalization](#startglobalization) to assign.
 
 ### UpdateModeEventArgs
 With this you can get information about the string assignment mode and the language, either by update (``` Update ```) or first startup (``` Insert ```).
