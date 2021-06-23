@@ -10,7 +10,8 @@ namespace GlobalStrings
     /// Class that help with language string management. The types used in <c>LanguageInfo<TLangCode, KTextCode></c> must be the same here.
     /// </summary>
     /// <typeparam name="TLangCode">Defines the type used to identify <c>LanguageInfo<TLangCode, KTextCode></c>.</typeparam>
-    /// <typeparam name="KTextCode">Defines the type used to identify the strings in <c>LanguageInfo<...>.textBook</c></typeparam>
+    /// <typeparam name="KTextCode">Defines the type used to identify the strings in <c>LanguageInfo<...>.textBook</c>.</typeparam>
+    /// <typeparamref name="GCollectionCode"/>Defines the type used to identify <c>TextBookCollection</c> collections.</typeparam>
     public partial class Globalization<TLangCode, KTextCode, GCollectionCode>
     {
         [NotNull]
