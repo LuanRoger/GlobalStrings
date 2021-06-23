@@ -6,17 +6,35 @@ using System.Linq;
 
 namespace GlobalStrings
 {
+    /// <summary>
+    /// Contains language information.
+    /// </summary>
+    /// <typeparam name="TLangCode">Defines the type used to identify <c>LanguageInfo<TLangCode, KTextCode></c>.</typeparam>
+    /// <typeparam name="KTextCode">Defines the type used to identify the strings in <c>LanguageInfo<...>.textBook</c>.</typeparam>
+    /// <typeparamref name="GCollectionCode"/>Defines the type used to identify <c>TextBookCollection</c> collections.</typeparam>
     public sealed class LanguageInfo<TLangCode, KTextCode, GCollectionCode>
     {
+        /// <summary>
+        /// Identifies the language by a unique code for each one.
+        /// </summary>
         public TLangCode langCode { get; private set; }
 
         [AllowNull]
-        [Obsolete]
+        [Obsolete("It is recommended to use TextBookCollection instead of this.")]
         public Dictionary<KTextCode, string> textLangBook { get; set; }
+        /// <summary>
+        /// Contains and manages language string collections.
+        /// </summary>
         public TextBookCollection<TLangCode, KTextCode, GCollectionCode> textBookCollection { get; set; }
 
-        public LanguageInfo(TLangCode langCode, Dictionary<KTextCode, string> textLangBook = null, 
-            TextBookCollection<TLangCode, KTextCode, GCollectionCode> textBookCollection = null)
+        /// <summary>
+        /// Instantiate a new LanguageInfo.
+        /// </summary>
+        /// <param name="langCode">It is mandatory at first, define the code that will identify the language.</param>
+        /// <param name="textBookCollection">Defines all collections used in the language.</param>
+        /// <param name="textLangBook">Obsolete</param>
+        public LanguageInfo(TLangCode langCode, TextBookCollection<TLangCode, KTextCode, GCollectionCode> textBookCollection = null,
+            Dictionary<KTextCode, string> textLangBook = null)
         {
             this.langCode = langCode;
             this.textLangBook = textLangBook;
