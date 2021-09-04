@@ -1,8 +1,8 @@
 ﻿using System;
+using GlobalStrings.Util.Types;
 
-namespace GlobalStrings
+namespace GlobalStrings.EventArguments
 {
-    public enum UpdateMode {Update, Insert, Sync}
     public sealed class UpdateModeEventArgs : EventArgs
     {
         public UpdateMode mode { get; internal init; }

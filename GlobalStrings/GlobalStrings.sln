@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GlobalStrings", "GlobalStri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalStrings.Test", "..\GlobalStrings.Test\GlobalStrings.Test.csproj", "{DD0127C7-7370-4235-842A-573314CA8D9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalStrings.Sample", "..\GlobalStrings.Sample\GlobalStrings.Sample.csproj", "{64B1777D-009F-428C-8921-DB3DE0D416FA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{DD0127C7-7370-4235-842A-573314CA8D9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD0127C7-7370-4235-842A-573314CA8D9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD0127C7-7370-4235-842A-573314CA8D9B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64B1777D-009F-428C-8921-DB3DE0D416FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64B1777D-009F-428C-8921-DB3DE0D416FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64B1777D-009F-428C-8921-DB3DE0D416FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64B1777D-009F-428C-8921-DB3DE0D416FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
