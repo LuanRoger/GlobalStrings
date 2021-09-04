@@ -27,8 +27,8 @@ namespace GlobalStrings.Sample.Strings
             
             List<LanguageInfo<string, int, string>> languageList = new() {ptBr, en};
 
-            Globalization<string, int, string>
-            .SetGlobalizationInstance(new Globalization<string, int, string>(languageList, "pt_br"));
+            Globalization.Globalization<string, int, string>
+            .SetGlobalizationInstance(new Globalization.Globalization<string, int, string>(languageList, "pt_br"));
         }       
     }
 }

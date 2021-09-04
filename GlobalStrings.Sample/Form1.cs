@@ -3,6 +3,7 @@ using GlobalStrings;
 using System.Windows.Forms;
 using GlobalStrings.Sample.Strings;
 using System.Drawing;
+using GlobalStrings.Util.Types;
 
 namespace GlobalStrings.Sample
 {
@@ -13,8 +14,8 @@ namespace GlobalStrings.Sample
             InitializeComponent();
 
             Languages.Init();
-            Globalization<string, int, string>.GetGlobalizationInstance().LangTextObserver += Form1_LangTextObserver;
-            Globalization<string, int, string>.GetGlobalizationInstance().StartGlobalization();
+            Globalization.Globalization<string, int, string>.GetGlobalizationInstance().LangTextObserver += Form1_LangTextObserver;
+            Globalization.Globalization<string, int, string>.GetGlobalizationInstance().StartGlobalization();
             Load += (_, _) => cmbLanguages.SelectedIndex = 0;
         }
 
@@ -25,16 +26,16 @@ namespace GlobalStrings.Sample
                 "pt_br" => new Size(200, 23),
                 "en" => new Size(190, 23)
             };
-            lblTextPlaceholder.Text = Globalization<string, int, string>.GetGlobalizationInstance().SetText("Home", 0);
-            btnChangeLang.Text = Globalization<string, int, string>.GetGlobalizationInstance().SetText("Home", 1);
-            btnSizeDemo.Text = Globalization<string, int, string>.GetGlobalizationInstance().SetText("Home", 2);
+            lblTextPlaceholder.Text = Globalization.Globalization<string, int, string>.GetGlobalizationInstance().SetText("Home", 0);
+            btnChangeLang.Text = Globalization.Globalization<string, int, string>.GetGlobalizationInstance().SetText("Home", 1);
+            btnSizeDemo.Text = Globalization.Globalization<string, int, string>.GetGlobalizationInstance().SetText("Home", 2);
         }
 
         private void btnChangeLang_Click(object sender, EventArgs e)
         {
             string keyLang = cmbLanguages.SelectedItem.ToString() == "Português (Brasil)" ? "pt_br" : "en";
 
-            Globalization<string, int, string>.GetGlobalizationInstance().UpdateLang(keyLang);
+            Globalization.Globalization<string, int, string>.GetGlobalizationInstance().UpdateLang(keyLang);
         }
     }
 }

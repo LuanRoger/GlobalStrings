@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GlobalStrings.Exeptions
 {
-    [Serializable]
-    class StopedGlobalizationExeption : Exception
+    internal class StopedGlobalizationExeption : Exception
     {
-        public StopedGlobalizationExeption() : base() {}
-        public StopedGlobalizationExeption(string message) : base(message) {}
-        public StopedGlobalizationExeption(string message, Exception inner) {}
-        public StopedGlobalizationExeption(SerializationInfo sInfo, 
-            StreamingContext streamingContext) : base(sInfo, streamingContext) {}
+        private const string STOPED_GLOBALIZATION_EXEPTION_MESSAGE = 
+            "Globalization has not started. Call StartGlobalization first.";
+        
+        public StopedGlobalizationExeption() : base(STOPED_GLOBALIZATION_EXEPTION_MESSAGE) {}
     }
 }

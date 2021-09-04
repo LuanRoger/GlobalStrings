@@ -1,13 +1,15 @@
-﻿using GlobalStrings.Exeptions;
+﻿using GlobalStrings.EventArguments;
+using GlobalStrings.Exeptions;
 
-namespace GlobalStrings
+namespace GlobalStrings.Globalization
 {
-    public partial class Globalization<TLangCode, KTextCode, GCollectionCode>
+    public partial class Globalization<TLangCode, GCollectionCode, KTextCode>
     {
         public delegate void LangTextObserverEventHandler(object sender, UpdateModeEventArgs updateModeEventArgs);
 
         /// <summary>
-        /// This event is called every time the language is changed or <c>StartGlobalization</c> is called, updating all strings.
+        /// This event is executed every time the language is changed,
+        /// <c>StartGlobalization</c> or <c>SyncStrings</c> is called, updating all strings.
         /// </summary>
         public virtual event LangTextObserverEventHandler LangTextObserver;
 
@@ -19,9 +21,8 @@ namespace GlobalStrings
         private void LangTextObserverCall(object sender, UpdateModeEventArgs updateModeEventArgs)
         {
             if(!hasStarted)
-            {
-                throw new StopedGlobalizationExeption(ExeptionsMessages.STOPED_GLOBALIZATION_EXEPTION_MESSAGE);
-            }
+                throw new StopedGlobalizationExeption();
+            
             LangTextObserver?.Invoke(sender, updateModeEventArgs);
         }
     }
