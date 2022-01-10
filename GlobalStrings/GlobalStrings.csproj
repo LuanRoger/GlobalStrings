@@ -21,7 +21,7 @@
 Corrections:
 - Some tests have been removed.
 - Remodeled tests.</ReleaseNotes>
-    <PackageVersion>0.2.0</PackageVersion>
+    <PackageVersion>0.2.1</PackageVersion>
   </PropertyGroup>
 
 </Project>

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using GlobalStrings.Exeptions;
-using GlobalStrings.Util.Types;
+using GlobalStrings.Types;
+using GlobalStrings.Types.Enums;
 
 namespace GlobalStrings.Globalization
 {
@@ -33,12 +34,6 @@ namespace GlobalStrings.Globalization
         public Globalization([NotNull] List<LanguageInfo<TLangCode, GCollectionCode, KTextCode>> languagesInfo,
             [NotNull] TLangCode langCodeNow)
         {
-            if(languagesInfo.GroupBy(langList => langList.langCode)
-                .Where(code => code.Count() > 1)
-                .Select(code => code.Key)
-                .ToList().Count >= 1)
-                throw new ArgumentException("There is one or more languages with the same code.");
-
             this.langCodeNow = langCodeNow;
             this.languagesInfo = languagesInfo;
         }
@@ -46,10 +41,10 @@ namespace GlobalStrings.Globalization
         /// <summary>
         /// Set the text according to the current language. Must be used in <c>LangTextObserver</c> event.
         /// </summary>
-        /// <param name="collectionCode">Address where the string is in a collection</param>
-        /// <param name="key">String allocation key in a collection</param>
-        /// <returns>A string according to the current language</returns>
-        /// <example>string text = globalization.SetText(0)</example>
+        /// <param name="collectionCode">Address where the string is in a collection.</param>
+        /// <param name="key">String allocation key in a collection.</param>
+        /// <returns>A string according to the current language.</returns>
+        /// <example><code>string text = globalization.SetText(0)</code></example>
         /// <exception cref="StopedGlobalizationExeption"></exception>
         public string SetText(GCollectionCode collectionCode, KTextCode key)
         {
@@ -58,6 +53,22 @@ namespace GlobalStrings.Globalization
 
             return languagesInfo.First(c => Equals(c.langCode, langCodeNow))
                 .textBookCollection[collectionCode][key];
+        }
+        /// <summary>
+        /// Set the text according to the current language. Must be used in <c>LangTextObserver</c> event.
+        /// </summary>
+        /// <param name="textCode">Key pair than identify the text. Where the <c>Key</c> is the <c>GCollectionCode</c> and
+        /// <c>Value</c> is <c>KTextCode</c>.</param>
+        /// <returns>A string according to the current language.</returns>
+        /// <example><code>string text = globalization.SetText(new("Home", 0))</code></example>
+        /// <exception cref="StopedGlobalizationExeption"></exception>
+        public string SetText(KeyValuePair<GCollectionCode, KTextCode> textCode)
+        {
+            if(!hasStarted)
+                throw new StopedGlobalizationExeption();
+
+            return languagesInfo.First(c => Equals(c.langCode, langCodeNow))
+                .textBookCollection[textCode.Key][textCode.Value];
         }
 
         /// <summary>
@@ -80,7 +91,7 @@ namespace GlobalStrings.Globalization
         public void StartGlobalization()
         {
             hasStarted = true;
-            LangTextObserverCall(this, new(){mode = UpdateMode.Insert, lang = langCodeNow});
+            LangTextObserverCall(this, new(){ mode = UpdateMode.Insert, lang = langCodeNow });
         }
 
         /// <summary>
@@ -91,7 +102,7 @@ namespace GlobalStrings.Globalization
             if(!hasStarted)
                 throw new StopedGlobalizationExeption();
             
-            LangTextObserverCall(this, new(){mode = UpdateMode.Sync, lang = langCodeNow});
+            LangTextObserverCall(this, new(){ mode = UpdateMode.Sync, lang = langCodeNow });
         }
     }
 }

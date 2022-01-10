@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GlobalStrings.EventArguments;
 using GlobalStrings.Globalization;
+using GlobalStrings.Types;
 using Xunit;
 
 namespace GlobalStrings.Test

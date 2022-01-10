@@ -2,7 +2,7 @@
 {
     public partial class Globalization<TLangCode, GCollectionCode, KTextCode>
     {
-        private static Globalization<TLangCode, GCollectionCode, KTextCode> globalizationInstance {get; set;}
+        private static Globalization<TLangCode, GCollectionCode, KTextCode> globalizationInstance { get; set; }
 
         /// <summary>
         /// Get the global instance of <c>Globalization</c>
@@ -18,13 +18,7 @@
             globalizationInstance = globalization;
 
         /// <summary>
-        /// Creates a shallow copy of the current System.Object.
-        /// </summary>
-        /// <returns>A shallow copy of the current System.Object.</returns>
-        public object Clone() => MemberwiseClone();
-
-        /// <summary>
-        /// Return <c>globalizationInstance</c> to null.
+        /// Set <c>globalizationInstance</c> to null.
         /// </summary>
         public void Clear() => globalizationInstance = null;
     }

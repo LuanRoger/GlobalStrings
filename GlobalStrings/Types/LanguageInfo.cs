@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using GlobalStrings.Collection;
 
-namespace GlobalStrings
+namespace GlobalStrings.Types
 {
     /// <summary>
     /// Contains language information.

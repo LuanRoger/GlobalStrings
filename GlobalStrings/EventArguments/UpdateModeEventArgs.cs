@@ -1,5 +1,5 @@
 ﻿using System;
-using GlobalStrings.Util.Types;
+using GlobalStrings.Types.Enums;
 
 namespace GlobalStrings.EventArguments
 {
