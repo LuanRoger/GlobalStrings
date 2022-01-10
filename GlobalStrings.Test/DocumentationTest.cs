@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using GlobalStrings.Collection;
-using GlobalStrings.Globalization;
+﻿using GlobalStrings.Globalization;
+using GlobalStrings.Types;
 using Xunit;
 
 namespace GlobalStrings.Test

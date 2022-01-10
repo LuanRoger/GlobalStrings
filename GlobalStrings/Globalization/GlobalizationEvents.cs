@@ -18,12 +18,7 @@ namespace GlobalStrings.Globalization
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="updateModeEventArgs">Provides properties about language changes at runtime</param>
-        private void LangTextObserverCall(object sender, UpdateModeEventArgs updateModeEventArgs)
-        {
-            if(!hasStarted)
-                throw new StopedGlobalizationExeption();
-            
+        private void LangTextObserverCall(object sender, UpdateModeEventArgs updateModeEventArgs) =>
             LangTextObserver?.Invoke(sender, updateModeEventArgs);
-        }
     }
 }
