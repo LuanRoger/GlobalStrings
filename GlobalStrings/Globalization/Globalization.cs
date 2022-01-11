@@ -17,9 +17,9 @@ namespace GlobalStrings.Globalization
     public partial class Globalization<TLangCode, GCollectionCode, KTextCode>
     {
         [NotNull]
-        private TLangCode langCodeNow { get; set;}
+        private TLangCode langCodeNow { get; set; }
         [NotNull]
-        private List<LanguageInfo<TLangCode, GCollectionCode, KTextCode>> languagesInfo { get; }
+        internal List<LanguageInfo<TLangCode, GCollectionCode, KTextCode>> languagesInfo { get; set; }
         /// <summary>
         /// Get the state of the <c>Globalization</c>
         /// </summary>

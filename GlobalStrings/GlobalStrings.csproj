@@ -24,4 +24,8 @@ Corrections:
     <PackageVersion>0.2.1</PackageVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
 </Project>
