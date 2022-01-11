@@ -11,7 +11,7 @@ namespace GlobalStrings.Extensions
 {
     public static class GlobalizationJsonSerializer
     {
-        public static string SerializeLanguageInfos<TLangCode, GCollectionCode, KTextCode>
+        private static string SerializeLanguageInfos<TLangCode, GCollectionCode, KTextCode>
             (this Globalization<TLangCode, GCollectionCode, KTextCode> globalization) =>
                 JsonConvert.SerializeObject(globalization.languagesInfo, Formatting.Indented);
 

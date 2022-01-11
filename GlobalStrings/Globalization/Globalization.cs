@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using GlobalStrings.Exeptions;
+using GlobalStrings.Extensions;
 using GlobalStrings.Types;
 using GlobalStrings.Types.Enums;
 
@@ -26,16 +27,25 @@ namespace GlobalStrings.Globalization
         public bool hasStarted {get; private set;} = false;
 
         /// <summary>
-        /// Instance a new <c>Globalization</c>
+        /// Instance a new <c>Globalization</c>.
         /// </summary>
         /// <param name="languagesInfo">List of languages that will be used in the application</param>
         /// <param name="langCodeNow">Initial language code</param>
-        /// <exception cref="ArgumentException"></exception>
         public Globalization([NotNull] List<LanguageInfo<TLangCode, GCollectionCode, KTextCode>> languagesInfo,
             [NotNull] TLangCode langCodeNow)
         {
             this.langCodeNow = langCodeNow;
             this.languagesInfo = languagesInfo;
+        }
+        /// <summary>
+        /// Instance a new <c>Globalization</c> and load all the string in the JSON file
+        /// </summary>
+        /// <param name="filepath">Path to JSON file than contains all the languages strings.</param>
+        /// <param name="langCodeNow">Initial language code</param>
+        public Globalization([NotNull] string filepath, [NotNull] TLangCode langCodeNow)
+        {
+            this.langCodeNow = langCodeNow;
+            this.LoadLanguageInfos(filepath);
         }
 
         /// <summary>
@@ -80,6 +90,8 @@ namespace GlobalStrings.Globalization
         {
             if(!hasStarted)
                 throw new StopedGlobalizationExeption();
+            if(!languagesInfo.Any(langInfo => langInfo.langCode.Equals(newLangCode)))
+                throw new IncorrectLangCodeException(languagesInfo.GetType());
             
             langCodeNow = newLangCode;
             LangTextObserverCall(this, new(){mode = UpdateMode.Update, lang = newLangCode});
