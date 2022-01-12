@@ -1,64 +1,75 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+using System.Reflection;
+using GlobalStrings.EventArguments;
 using GlobalStrings.Extensions;
 using GlobalStrings.Globalization;
-using GlobalStrings.Types;
+using GlobalStrings.Test.Utils;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace GlobalStrings.Test
 {
     public class SerializationTest
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private Globalization<string, string, int> _globalization { get; set; }
+        private readonly string JSON_TEXT_PATH = $@"{Directory.GetCurrentDirectory()}\Strings.json";
+        private string text;
 
-        public SerializationTest(ITestOutputHelper testOutputHelper)
+        public SerializationTest()
         {
-            _testOutputHelper = testOutputHelper;
+            StartGlobalization();
         }
-        
-        private readonly string JSON_TEXT_PATH = $"{Directory.GetCurrentDirectory()}" + @"\Strings.json";
-        
-        private List<LanguageInfo<string, int, int>> _languageInfos { get; set; } = new(new []
+
+        private void StartGlobalization()
         {
-            new LanguageInfo<string, int, int>("pt_br", new(new()
-            {
-                {0, new()
-                {
-                    { 0, "Oi" }
-                }}
-            })),
-            new LanguageInfo<string, int, int>("en_us", new(new()
-            {
-                {
-                    0, new()
-                    {
-                        {0, "Hello"}
-                    }
-                }
-            }))
-        });
-        private Globalization<string, int, int> globalization { get; set; }
-        
-        [Fact]
-        public void SerializationOnlyTest()
-        {
-            globalization = new(_languageInfos, "pt_br");
-            _testOutputHelper.WriteLine(globalization.SerializeLanguageInfos());
+            _globalization = new(Consts.languageInfos, "pt_br");
+            _globalization.StartGlobalization();
         }
-        
+
         [Fact]
         public void SaveSerializationTest()
         {
-            globalization = new(_languageInfos, "pt_br");
-            globalization.SaveLanguageInfos(JSON_TEXT_PATH);
+            _globalization.SaveLanguageInfos(JSON_TEXT_PATH);
+            
+            Assert.True(File.Exists(JSON_TEXT_PATH));
+        }
+        [Fact]
+        public void SaveSerializationAsyncTest()
+        {
+            SaveSerializationAsync();
         }
         
         [Fact]
-        public void LoadSerializationTest()
+        public void LoadSerializationAsyncTest()
         {
-            globalization = new(_languageInfos, "pt_br");
-            globalization.LoadLanguageInfos(JSON_TEXT_PATH);
+            LoadSerializationAsync();
         }
+        [Fact]
+        public void LoadSerializationByConstructorTest()
+        {
+            _globalization.SaveLanguageInfos(JSON_TEXT_PATH);
+            
+            _globalization = new(JSON_TEXT_PATH, "pt_br");
+            _globalization.LangTextObserver += GlobalizationOnLangTextObserver;
+            
+            _globalization.StartGlobalization();
+            
+            Assert.Equal("Olá", text);
+        }
+
+        private void GlobalizationOnLangTextObserver(object sender, UpdateModeEventArgs updatemodeeventargs)
+        {
+            text = _globalization.SetText("Home", 0);
+        }
+
+        #region AsyncTasks
+        private async void LoadSerializationAsync()
+        {
+            await _globalization.LoadLanguageInfosAsync(JSON_TEXT_PATH);
+        }
+        private async void SaveSerializationAsync()
+        {
+            await _globalization.SaveLanguageInfosAsync(JSON_TEXT_PATH);
+        }
+        #endregion
     }
 }
