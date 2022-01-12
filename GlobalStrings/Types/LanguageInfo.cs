@@ -19,7 +19,7 @@ namespace GlobalStrings.Types
         /// <summary>
         /// Contains language strings collections.
         /// </summary>
-        public TextBookCollection<GCollectionCode, KTextCode> textBookCollection { get; set; }
+        public TextBookCollection<GCollectionCode, KTextCode> textBookCollection { get; }
 
         /// <summary>
         /// Instantiate a new LanguageInfo.
