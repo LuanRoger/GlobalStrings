@@ -1,21 +1,19 @@
-<h1 align="center">GlobalStrings</h1>
-<h3 align="center">Simple package that helps manage strings for implementing new languages in .NET applications</h3>
+# GlobalStrings
+### Simple package that helps manage strings for implementing new languages in .NET applications
 
-<p>
-   <img src="https://img.shields.io/nuget/v/GlobalStrings">
-   <img src="https://img.shields.io/nuget/dt/GlobalStrings">
-<p/>
+![](https://img.shields.io/nuget/v/GlobalStrings)
+![](https://img.shields.io/nuget/dt/GlobalStrings)
 
-## Dependencies
+### Dependencies
 - .NET 5
 
 ## Installation
 ### PM
-```
+```powershell
 Install-Package GlobalStrings
 ```
 ### .NET CLI
-```
+```powershell
 dotnet add package GlobalStrings
 ```
 See also in [Nuget Packages](https://www.nuget.org/packages/GlobalStrings)
@@ -77,4 +75,4 @@ private void Globalization_LangTextObserver(object sender, UpdateModeEventArgs u
 ```
 
 # Documentation
-Access the [documentation here](https://github.com/LuanRoger/GlobalStrings/wiki)
+Access the [documentation here](https://github.com/LuanRoger/GlobalStrings/wiki).
