@@ -3,29 +3,23 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <PackageId>GlobalStrings</PackageId>
-    <Version>0.1.2</Version>
+    <Version>0.2.2</Version>
+    <PackageVersion>0.2.2</PackageVersion>
+    <Title>Global Strings</Title>
     <License>MIT</License>
     <Authors>Luan Roger</Authors>
     <PackageDescription>Implement new languages easily.</PackageDescription>
     <Description>Implement new languages easily.</Description>
     <RepositoryUrl>https://github.com/LuanRoger/GlobalStrings</RepositoryUrl>
     <PackageProjectUrl>https://github.com/LuanRoger/GlobalStrings</PackageProjectUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>languages;global;c#;csharp;dotnet;globalization</PackageTags>
-    <Title>Global Strings</Title>
     <Summary>Simple package that helps manage strings for implementing new languages in .NET applications</Summary>
-    <ReleaseNotes>Features:
-- It is now possible to create string collections inside a LanguageInfo.
-- textLangBook is obsolete.
-- Removed non-generic classes.
-Corrections:
-- Some tests have been removed.
-- Remodeled tests.</ReleaseNotes>
-    <PackageVersion>0.2.1</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <None Include="..\LICENSE" Pack="true" PackagePath=""/>
   </ItemGroup>
 
 </Project>
