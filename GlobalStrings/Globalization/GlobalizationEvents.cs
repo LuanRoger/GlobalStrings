@@ -1,5 +1,4 @@
 ﻿using GlobalStrings.EventArguments;
-using GlobalStrings.Exeptions;
 
 namespace GlobalStrings.Globalization
 {

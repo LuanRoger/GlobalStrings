@@ -2,7 +2,7 @@
 
 namespace GlobalStrings.Exeptions
 {
-    internal class StopedGlobalizationExeption : Exception
+    public class StopedGlobalizationExeption : Exception
     {
         private const string STOPED_GLOBALIZATION_EXEPTION_MESSAGE = 
             "Globalization has not started. Call StartGlobalization first.";
