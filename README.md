@@ -6,6 +6,7 @@
 
 ### Dependencies
 - .NET 5
+- [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json) (>= 13.0.1)
 
 ## Installation
 ### PM
@@ -23,56 +24,53 @@ See also in [Nuget Packages](https://www.nuget.org/packages/GlobalStrings)
 using System.Collections.Generic;
 using GlobalStrings;
 
-Globalization<int, int, int> globalization;
+private Globalization<string, string, int> _globalization { get; set; }
+private LanguageInfo<string, string, int> languagePtBr => new("pt_br", new(new()
+{
+    { "Home", new()
+    {
+        {0, "Olá"},
+        {1, "Seja Bem-Vindo"}
+    }}
+}));
+
+private LanguageInfo<string, string, int> languageEn => new("en_us", new(new()
+{
+    {"Home", new()
+    {
+        { 0, "Hello" },
+        { 1, "Wellcome" }
+    }}
+}));
+
 private string congrats;
-private string exit;
 private string wellcome;
 
 public void ChangeLanguageTest()
 {
-    Start();
+    StartGlobalization();
     Assert.Equal("Olá", congrats);
     Assert.Equal("Seja Bem-Vindo", wellcome);
 
-    Globalization<string, string, int>.GetGlobalizationInstance().UpdateLang("en");
+    _globalization.UpdateLang("en");
 
     Assert.Equal("Hello", congrats);
     Assert.Equal("Wellcome", wellcome);
 }
 
-private void Start()
+private void StartGlobalization()
 {
-    LanguageInfo<string, string, int> languagePtBr = new("pt_br");
-    languagePtBr.textBookCollection = new();
-    languagePtBr.textBookCollection.Add("Home", new()
-    {
-        {0, "Olá"},
-        {1, "Seja Bem-Vindo"}
-    });
-
-    LanguageInfo<string, string, int> languageEn = new("en", new()
-    {
-        {"Home", new()
-        {
-            { 0, "Hello" },
-            { 1, "Wellcome" }
-         }}
-    });
-
-    List<LanguageInfo<string, string, int>> languageInfos = new(){ languagePtBr, languageEn };;
-
-    Globalization<string, string, int>.SetGlobalizationInstance(new(languageInfos, "pt_br"));
-    Globalization<string, string, int>.GetGlobalizationInstance().LangTextObserver += Globalization_LangTextObserver;
-
-    Globalization<string, string, int>.GetGlobalizationInstance().StartGlobalization();
+    _globalization = new(new() { languagePtBr, languageEn }, "pt_br");
+    _globalization.LangTextObserver += Globalization_LangTextObserver;
+    _globalization.StartGlobalization();
 }
 
 private void Globalization_LangTextObserver(object sender, UpdateModeEventArgs updateModeEventArgs)
 {
-   congrats = Globalization<string, string, int>.GetGlobalizationInstance().SetText("Home", 0);
-   wellcome = Globalization<string, string, int>.GetGlobalizationInstance().SetText("Home", 1);
+   congrats = _globalization.SetText("Home", 0);
+   wellcome = _globalization.SetText("Home", 1);
 }
 ```
 
-# Documentation
+## Documentation
 Access the [documentation here](https://github.com/LuanRoger/GlobalStrings/wiki).
