@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Reflection;
 using GlobalStrings.EventArguments;
 using GlobalStrings.Extensions;
 using GlobalStrings.Globalization;
@@ -11,6 +10,7 @@ namespace GlobalStrings.Test
     public class SerializationTest
     {
         private Globalization<string, string, int> _globalization { get; set; }
+        
         private readonly string JSON_TEXT_PATH = $@"{Directory.GetCurrentDirectory()}\Strings.json";
         private string text;
 
@@ -24,29 +24,53 @@ namespace GlobalStrings.Test
             _globalization = new(Consts.languageInfos, "pt_br");
             _globalization.StartGlobalization();
         }
+        private void CreateJsonFileToLoad()
+        {
+            lock (_globalization)
+            {
+                _globalization.SaveLanguageInfos(JSON_TEXT_PATH);
+            }
+        }
 
         [Fact]
         public void SaveSerializationTest()
         {
             _globalization.SaveLanguageInfos(JSON_TEXT_PATH);
-            
+
             Assert.True(File.Exists(JSON_TEXT_PATH));
+        }
+        [Fact]
+        public void SaveSerializationAsyncTaskTest()
+        {
+            SaveSerializationAsyncTask();
         }
         [Fact]
         public void SaveSerializationAsyncTest()
         {
-            SaveSerializationAsync();
+            _globalization.SaveLanguageInfosAsync(JSON_TEXT_PATH);
         }
-        
+        [Fact]
+        public void LoadSerializationAsyncTaskTest()
+        {
+            if(!File.Exists(JSON_TEXT_PATH))
+                CreateJsonFileToLoad();
+            
+            LoadSerializationAsyncTask();
+        }
         [Fact]
         public void LoadSerializationAsyncTest()
         {
-            LoadSerializationAsync();
+            if(!File.Exists(JSON_TEXT_PATH))
+                CreateJsonFileToLoad();
+            
+            _globalization.LoadLanguageInfosAsync(JSON_TEXT_PATH);
         }
+
         [Fact]
         public void LoadSerializationByConstructorTest()
         {
-            _globalization.SaveLanguageInfos(JSON_TEXT_PATH);
+            if(!File.Exists(JSON_TEXT_PATH))
+                CreateJsonFileToLoad();
             
             _globalization = new(JSON_TEXT_PATH, "pt_br");
             _globalization.LangTextObserver += GlobalizationOnLangTextObserver;
@@ -62,13 +86,13 @@ namespace GlobalStrings.Test
         }
 
         #region AsyncTasks
-        private async void LoadSerializationAsync()
+        private async void SaveSerializationAsyncTask()
         {
-            await _globalization.LoadLanguageInfosAsync(JSON_TEXT_PATH);
+            await _globalization.SaveLanguageInfosAsyncTask(JSON_TEXT_PATH);
         }
-        private async void SaveSerializationAsync()
+        private async void LoadSerializationAsyncTask()
         {
-            await _globalization.SaveLanguageInfosAsync(JSON_TEXT_PATH);
+            await _globalization.LoadLanguageInfosAsyncTask(JSON_TEXT_PATH);
         }
         #endregion
     }

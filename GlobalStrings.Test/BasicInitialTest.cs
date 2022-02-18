@@ -1,6 +1,7 @@
 using GlobalStrings.EventArguments;
 using GlobalStrings.Globalization;
 using GlobalStrings.Test.Utils;
+using GlobalStrings.Types;
 using Xunit;
 
 namespace GlobalStrings.Test
@@ -50,6 +51,14 @@ namespace GlobalStrings.Test
 
         private void StartGlobalization()
         {
+            LanguageInfo<string, string, int> languageInfo = new("en_us");
+            languageInfo.textBookCollection = new();
+            languageInfo.textBookCollection.Add("Home", new()
+            {
+                { 0, "Hello" },
+                { 1, "Wellcome" }
+            });
+            
             _globalization = new(Consts.languageInfos, "pt_br");
             _globalization.LangTextObserver += Globalization_LangTextObserver;
             _globalization.StartGlobalization();

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using GlobalStrings.EventArguments;
 using GlobalStrings.Exeptions;
 using GlobalStrings.Extensions;
