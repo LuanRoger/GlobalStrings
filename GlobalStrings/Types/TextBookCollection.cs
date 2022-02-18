@@ -7,7 +7,7 @@ using System.Linq;
 namespace GlobalStrings.Types
 {
     /// <summary>
-    /// Collection of strings with an identifier.
+    /// Collection of dictionaries with an identifier, used to tag one or more language collections.
     /// </summary>
     /// <typeparam name="GCollectionCode">Type of unique identifier of the collection.</typeparam>
     /// <typeparam name="KTextCode">Type of identifier of each string in the collection.</typeparam>

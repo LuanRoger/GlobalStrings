@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using GlobalStrings.Exeptions;
@@ -38,7 +37,7 @@ namespace GlobalStrings.Globalization
             this.languagesInfo = languagesInfo;
         }
         /// <summary>
-        /// Instance a new <c>Globalization</c> and load all the string in the JSON file
+        /// Instance a new <c>Globalization</c> and load all the string in the JSON file.
         /// </summary>
         /// <param name="filepath">Path to JSON file than contains all the languages strings.</param>
         /// <param name="langCodeNow">Initial language code</param>

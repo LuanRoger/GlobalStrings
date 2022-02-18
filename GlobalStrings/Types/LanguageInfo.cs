@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+// ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
 
 namespace GlobalStrings.Types
 {
@@ -19,7 +20,7 @@ namespace GlobalStrings.Types
         /// <summary>
         /// Contains language strings collections.
         /// </summary>
-        public TextBookCollection<GCollectionCode, KTextCode> textBookCollection { get; }
+        public TextBookCollection<GCollectionCode, KTextCode> textBookCollection { get; set; }
 
         /// <summary>
         /// Instantiate a new LanguageInfo.

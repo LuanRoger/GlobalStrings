@@ -4,22 +4,22 @@
     <TargetFramework>net5.0</TargetFramework>
     <PackageId>GlobalStrings</PackageId>
     <Version>0.2.2</Version>
-    <PackageVersion>0.2.2</PackageVersion>
+    <PackageVersion>0.3.0</PackageVersion>
     <Title>Global Strings</Title>
     <License>MIT</License>
     <Authors>Luan Roger</Authors>
     <PackageDescription>Implement new languages easily.</PackageDescription>
-    <Description>Implement new languages easily.</Description>
+    <Description>Simple package that helps manage strings for implementing new languages in .NET applications.</Description>
     <RepositoryUrl>https://github.com/LuanRoger/GlobalStrings</RepositoryUrl>
     <PackageProjectUrl>https://github.com/LuanRoger/GlobalStrings</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageTags>languages;global;c#;csharp;dotnet;globalization</PackageTags>
+    <PackageTags>languages;global;c#;csharp;dotnet;globalization;localization;strings</PackageTags>
     <Summary>Simple package that helps manage strings for implementing new languages in .NET applications</Summary>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <None Include="..\LICENSE" Pack="true" PackagePath=""/>
+    <None Include="..\LICENSE" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>
