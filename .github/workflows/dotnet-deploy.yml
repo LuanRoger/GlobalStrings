@@ -1,4 +1,4 @@
-name: Nuget-Deploy
+name: .NET Deploy
 
 on:
   workflow_dispatch:
@@ -20,9 +20,7 @@ jobs:
       - name: Test
         run: dotnet test .\GlobalStrings\ --no-build --verbosity normal
         
-        
-  
-  nuget-deploy:
+  deploy-gh-packages:
     runs-on: windows-latest
     environment: prod
     needs: build-test
@@ -37,7 +35,27 @@ jobs:
       - name: Pack
         run: dotnet pack .\GlobalStrings\ -o out
         
-      - name: Release on Nuget
+      - name: Push to GH Pakcages
         run: |
           cd out
           dotnet nuget push *.nupkg --api-key ${{ secrets.GS_GH_PACKAGE_PAT }} --source "https://nuget.pkg.github.com/LuanRoger/index.json" --skip-duplicate
+  
+  deploy-nuget:
+    runs-on: windows-latest
+    environment: prod
+    needs: build-test
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1.9.0
+        with:
+          dotnet-version: 5.0.x
+      
+      - name: Pack
+        run: dotnet pack .\GlobalStrings\ -o out
+        
+      - name: Push to Nuget
+        run: |
+          cd out
+          dotnet nuget push *.nupkg --api-key ${{ secrets.GS_NUGET_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
