@@ -7,7 +7,7 @@ using GlobalStrings.Types;
 using GlobalStrings.Utils;
 using Newtonsoft.Json;
 
-namespace GlobalStrings.Extensions
+namespace GlobalStrings.Extensions.Serialization
 {
     public static class GlobalizationJsonSerializer
     {
@@ -100,8 +100,9 @@ namespace GlobalStrings.Extensions
                 loadedJsonText = streamReader.ReadToEnd();
 
                 
-            globalization.languagesInfo = 
+            globalization.languagesInfo =
                 JsonConvert.DeserializeObject<List<LanguageInfo<TLangCode, GCollectionCode, KTextCode>>>(loadedJsonText);
+            globalization.LoadStringsFromFileJson(filePath);
         }
         /// <summary>
         /// Load all LanguageInfo from a .json file asynchronously.
@@ -121,6 +122,7 @@ namespace GlobalStrings.Extensions
             string jsonText = await streamReader.ReadToEndAsync();
             globalization.languagesInfo = JsonConvert
                 .DeserializeObject<List<LanguageInfo<TLangCode, GCollectionCode, KTextCode>>>(jsonText);
+            globalization.LoadStringsFromFileJson(filePath);
         }
         /// <summary>
         /// Load all LanguageInfo from a .json file asynchronously.
@@ -141,6 +143,7 @@ namespace GlobalStrings.Extensions
             string jsonText = await streamReader.ReadToEndAsync();
             globalization.languagesInfo = JsonConvert
                 .DeserializeObject<List<LanguageInfo<TLangCode, GCollectionCode, KTextCode>>>(jsonText);
+            globalization.LoadStringsFromFileJson(filePath);
         }
         #endregion
     }

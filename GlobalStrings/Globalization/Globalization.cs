@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using GlobalStrings.Exeptions;
-using GlobalStrings.Extensions;
+using GlobalStrings.Extensions.Serialization;
 using GlobalStrings.Types;
 using GlobalStrings.Types.Enums;
 
@@ -18,12 +18,12 @@ namespace GlobalStrings.Globalization
     {
         [NotNull]
         private TLangCode langCodeNow { get; set; }
-        [NotNull]
         internal List<LanguageInfo<TLangCode, GCollectionCode, KTextCode>> languagesInfo { get; set; }
+        private LanguageInfo<TLangCode, GCollectionCode, KTextCode> actualLanguageInfo { get; set; }
         /// <summary>
         /// Get the state of the <c>Globalization</c>
         /// </summary>
-        public bool hasStarted {get; private set;} = false;
+        public bool hasStarted { get; private set; }
 
         /// <summary>
         /// Instance a new <c>Globalization</c>.
@@ -40,11 +40,11 @@ namespace GlobalStrings.Globalization
         /// Instance a new <c>Globalization</c> and load all the string in the JSON file.
         /// </summary>
         /// <param name="filepath">Path to JSON file than contains all the languages strings.</param>
-        /// <param name="langCodeNow">Initial language code</param>
+        /// <param name="langCodeNow">Initial language code.</param>
         public Globalization([NotNull] string filepath, [NotNull] TLangCode langCodeNow)
         {
             this.langCodeNow = langCodeNow;
-            this.LoadLanguageInfos(filepath);
+            StartFromFile(filepath);
         }
 
         /// <summary>
@@ -59,8 +59,9 @@ namespace GlobalStrings.Globalization
         {
             if(!hasStarted)
                 throw new StopedGlobalizationExeption();
-
-            return languagesInfo.First(c => Equals(c.langCode, langCodeNow))
+            
+            return stringsByFile ? actualLanguageInfo.textBookCollection[collectionCode][key] :
+                languagesInfo.First(c => Equals(c.langCode, langCodeNow))
                 .textBookCollection[collectionCode][key];
         }
         /// <summary>
@@ -75,9 +76,11 @@ namespace GlobalStrings.Globalization
         {
             if(!hasStarted)
                 throw new StopedGlobalizationExeption();
-
-            return languagesInfo.First(c => Equals(c.langCode, langCodeNow))
-                .textBookCollection[textCode.Key][textCode.Value];
+            
+            (GCollectionCode collectionCode, KTextCode key) = textCode;
+            return stringsByFile ? actualLanguageInfo.textBookCollection[collectionCode][key] :
+                languagesInfo.First(c => Equals(c.langCode, langCodeNow))
+                    .textBookCollection[collectionCode][key];
         }
 
         /// <summary>
@@ -93,7 +96,12 @@ namespace GlobalStrings.Globalization
                 throw new IncorrectLangCodeException(languagesInfo.GetType());
             
             langCodeNow = newLangCode;
-            LangTextObserverCall(this, new(){mode = UpdateMode.Update, lang = newLangCode});
+            if(stringsByFile)
+            {
+                this.LoadLanguageInfos(filepath);
+                return;
+            }
+            LangTextObserverCall(this, new(){ mode = UpdateMode.Update, lang = newLangCode });
         }
 
         /// <summary>

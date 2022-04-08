@@ -20,14 +20,15 @@ namespace GlobalStrings.Types
         /// <summary>
         /// Contains language strings collections.
         /// </summary>
-        public TextBookCollection<GCollectionCode, KTextCode> textBookCollection { get; set; }
+        public TextBookCollection<GCollectionCode, KTextCode> textBookCollection { get; }
 
         /// <summary>
         /// Instantiate a new LanguageInfo.
         /// </summary>
         /// <param name="langCode">It is mandatory at first, define the code that will identify the language.</param>
         /// <param name="textBookCollection">Defines all collections used in the language.</param>
-        public LanguageInfo([NotNull] TLangCode langCode, TextBookCollection<GCollectionCode, KTextCode> textBookCollection = null)
+        public LanguageInfo([NotNull] TLangCode langCode, 
+            TextBookCollection<GCollectionCode, KTextCode> textBookCollection)
         {
             this.langCode = langCode;
             this.textBookCollection = textBookCollection;
