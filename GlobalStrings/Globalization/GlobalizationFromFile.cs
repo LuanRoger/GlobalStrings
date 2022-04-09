@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using GlobalStrings.Exeptions;
 using GlobalStrings.Extensions.Serialization;
@@ -10,7 +11,7 @@ namespace GlobalStrings.Globalization
     public partial class Globalization<TLangCode, GCollectionCode, KTextCode>
     {
         private bool stringsByFile { get; set; }
-        private string filepath { get; set; }
+        private string? filepath { get; set; }
         
         private void StartFromFile(string filepath)
         {
@@ -37,7 +38,9 @@ namespace GlobalStrings.Globalization
         {
             if(!stringsByFile)
                 throw new IsNotStringByFileException(MethodBase.GetCurrentMethod()!.Name);
-            
+            if(languagesInfo is null)
+                throw new NullReferenceException(nameof(languagesInfo));
+
             actualLanguageInfo = languagesInfo.First(langInfo => langInfo.langCode.Equals(langCodeNow));
             languagesInfo = null;
         }

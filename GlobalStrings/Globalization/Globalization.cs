@@ -14,12 +14,12 @@ namespace GlobalStrings.Globalization
     /// <typeparam name="TLangCode">Defines the type used to identify <c>LanguageInfo&lt;TLangCode, KTextCode&gt;</c>.</typeparam>
     /// <typeparam name="KTextCode">Defines the type used to identify the strings in <c>LanguageInfo&lt;...&gt;.textBook</c>.</typeparam>
     /// <typeparam name="GCollectionCode">Defines the type used to identify <c>TextBookCollection</c> collections.</typeparam>
-    public partial class Globalization<TLangCode, GCollectionCode, KTextCode>
+    public sealed partial class Globalization<TLangCode, GCollectionCode, KTextCode>
     {
         [NotNull]
         private TLangCode langCodeNow { get; set; }
-        internal List<LanguageInfo<TLangCode, GCollectionCode, KTextCode>> languagesInfo { get; set; }
-        private LanguageInfo<TLangCode, GCollectionCode, KTextCode> actualLanguageInfo { get; set; }
+        internal List<LanguageInfo<TLangCode, GCollectionCode, KTextCode>>? languagesInfo { get; set; }
+        private LanguageInfo<TLangCode, GCollectionCode, KTextCode>? actualLanguageInfo { get; set; }
         /// <summary>
         /// Get the state of the <c>Globalization</c>
         /// </summary>
@@ -30,8 +30,8 @@ namespace GlobalStrings.Globalization
         /// </summary>
         /// <param name="languagesInfo">List of languages that will be used in the application</param>
         /// <param name="langCodeNow">Initial language code</param>
-        public Globalization([NotNull] List<LanguageInfo<TLangCode, GCollectionCode, KTextCode>> languagesInfo,
-            [NotNull] TLangCode langCodeNow)
+        public Globalization(List<LanguageInfo<TLangCode, GCollectionCode, KTextCode>> languagesInfo, 
+            TLangCode langCodeNow)
         {
             this.langCodeNow = langCodeNow;
             this.languagesInfo = languagesInfo;
@@ -41,7 +41,7 @@ namespace GlobalStrings.Globalization
         /// </summary>
         /// <param name="filepath">Path to JSON file than contains all the languages strings.</param>
         /// <param name="langCodeNow">Initial language code.</param>
-        public Globalization([NotNull] string filepath, [NotNull] TLangCode langCodeNow)
+        public Globalization(string filepath, TLangCode langCodeNow)
         {
             this.langCodeNow = langCodeNow;
             StartFromFile(filepath);
@@ -59,9 +59,13 @@ namespace GlobalStrings.Globalization
         {
             if(!hasStarted)
                 throw new StopedGlobalizationExeption();
-            
-            return stringsByFile ? actualLanguageInfo.textBookCollection[collectionCode][key] :
-                languagesInfo.First(c => Equals(c.langCode, langCodeNow))
+            if(stringsByFile && actualLanguageInfo is null)
+                throw new NullValueForDependency(nameof(stringsByFile), nameof(actualLanguageInfo));
+            if(!stringsByFile && languagesInfo is null)
+                throw new NullValueForDependency(nameof(stringsByFile), nameof(languagesInfo));
+
+            return stringsByFile ? actualLanguageInfo!.textBookCollection[collectionCode][key] :
+                languagesInfo!.First(c => Equals(c.langCode, langCodeNow))
                 .textBookCollection[collectionCode][key];
         }
         /// <summary>
@@ -76,10 +80,14 @@ namespace GlobalStrings.Globalization
         {
             if(!hasStarted)
                 throw new StopedGlobalizationExeption();
+            if(stringsByFile && actualLanguageInfo is null)
+                throw new NullValueForDependency(nameof(stringsByFile), nameof(actualLanguageInfo));
+            if(!stringsByFile && languagesInfo is null)
+                throw new NullValueForDependency(nameof(stringsByFile), nameof(languagesInfo));
             
             (GCollectionCode collectionCode, KTextCode key) = textCode;
-            return stringsByFile ? actualLanguageInfo.textBookCollection[collectionCode][key] :
-                languagesInfo.First(c => Equals(c.langCode, langCodeNow))
+            return stringsByFile ? actualLanguageInfo!.textBookCollection[collectionCode][key] :
+                languagesInfo!.First(c => Equals(c.langCode, langCodeNow))
                     .textBookCollection[collectionCode][key];
         }
 
@@ -92,16 +100,16 @@ namespace GlobalStrings.Globalization
         {
             if(!hasStarted)
                 throw new StopedGlobalizationExeption();
-            if(!languagesInfo.Any(langInfo => langInfo.langCode.Equals(newLangCode)))
+            if(languagesInfo is not null && !languagesInfo.Any(langInfo => langInfo.langCode.Equals(newLangCode)))
                 throw new IncorrectLangCodeException(languagesInfo.GetType());
-            
+            if(stringsByFile && filepath is null)
+                throw new NullValueForDependency(nameof(stringsByFile), nameof(actualLanguageInfo));
+
             langCodeNow = newLangCode;
             if(stringsByFile)
-            {
-                this.LoadLanguageInfos(filepath);
-                return;
-            }
-            LangTextObserverCall(this, new(){ mode = UpdateMode.Update, lang = newLangCode });
+                this.LoadLanguageInfos(filepath!);
+            
+            LangTextObserverCall(this, new(){ mode = UpdateMode.Update, lang = newLangCode! });
         }
 
         /// <summary>
