@@ -1,12 +1,12 @@
-name: .NET-CI
+name: .NET CI
 
 on:
+  push:
   pull_request:
     branches: [ main ]
 
 jobs:
   build-test:
-
     runs-on: windows-latest
 
     steps:
@@ -15,9 +15,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: Go to work directory
-      run: cd .\GlobalStrings\
     - name: Build
-      run: dotnet build
+      run: dotnet build .\GlobalStrings\
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test .\GlobalStrings\

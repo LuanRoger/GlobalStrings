@@ -33,7 +33,7 @@ jobs:
           dotnet-version: 5.0.x
       
       - name: Pack
-        run: dotnet pack .\GlobalStrings\ -o out
+        run: dotnet pack .\GlobalStrings\ -o out -c Release
         
       - name: Push to GH Pakcages
         run: |
@@ -53,7 +53,7 @@ jobs:
           dotnet-version: 5.0.x
       
       - name: Pack
-        run: dotnet pack .\GlobalStrings\ -o out
+        run: dotnet pack .\GlobalStrings\ -o out -c Release
         
       - name: Push to Nuget
         run: |
