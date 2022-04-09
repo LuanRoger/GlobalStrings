@@ -1,5 +1,6 @@
-﻿using GlobalStrings.Globalization;
-using GlobalStrings.Test.Utils;
+﻿using System.Collections.Generic;
+using GlobalStrings.Globalization;
+using GlobalStrings.Types;
 using Xunit;
 
 namespace GlobalStrings.Test
@@ -12,7 +13,25 @@ namespace GlobalStrings.Test
         }
         private void StarGlobalizationInstance()
         {
-            GlobalGlobalization<string, string, int>.SetInstance(new(Consts.languageInfos, "pt_br"));
+            LanguageInfo<string, string, int> languageInfoEnUs = new("en_us", new(new()
+            {
+                {"Home", new()
+                {
+                    { 0, "Hello" }, 
+                    { 1, "Wellcome" }  
+                }}
+            }));
+            LanguageInfo<string, string, int> languageInfoPtBr = new("pt_br", new(new()
+            {
+                { "Home", new()
+                {
+                    {0, "Olá"},
+                    {1, "Seja Bem-Vindo"}
+                }}
+            }));
+            List<LanguageInfo<string, string, int>> languageInfos = new() { languageInfoEnUs, languageInfoPtBr };
+            
+            GlobalGlobalization<string, string, int>.SetInstance(new(languageInfos, "pt_br"));
         }
         
         [Fact]

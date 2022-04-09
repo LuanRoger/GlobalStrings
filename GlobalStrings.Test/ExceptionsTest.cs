@@ -1,9 +1,10 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using GlobalStrings.EventArguments;
 using GlobalStrings.Exeptions;
-using GlobalStrings.Extensions;
+using GlobalStrings.Extensions.Serialization;
 using GlobalStrings.Globalization;
-using GlobalStrings.Test.Utils;
+using GlobalStrings.Types;
 using Xunit;
 
 namespace GlobalStrings.Test
@@ -11,9 +12,8 @@ namespace GlobalStrings.Test
     public class ExceptionsTest
     {
         private Globalization<string, string, int> _globalization { get; set; }
+        private List<LanguageInfo<string, string, int>> languageInfos { get; set; }
         private readonly string INVALID_JSON_FILE = $@"{Directory.GetCurrentDirectory()}\Strings.js";
-        
-        private string text;
 
         public ExceptionsTest()
         {
@@ -22,8 +22,25 @@ namespace GlobalStrings.Test
         
         private void StartGlobalization()
         {
-            _globalization = new(Consts.languageInfos, "pt_br");
-            _globalization.LangTextObserver += GlobalizationOnLangTextObserver;
+            LanguageInfo<string, string, int> languageInfoEnUs = new("en_us", new(new()
+            {
+                {"Home", new()
+                {
+                    { 0, "Hello" }, 
+                    { 1, "Wellcome" }  
+                }}
+            }));
+            LanguageInfo<string, string, int> languageInfoPtBr = new("pt_br", new(new()
+            {
+                { "Home", new()
+                {
+                    {0, "Olá"},
+                    {1, "Seja Bem-Vindo"}
+                }}
+            }));
+            languageInfos = new() { languageInfoEnUs, languageInfoPtBr };
+
+            _globalization = new(languageInfos, "pt_br");
         }
         
         [Fact]
@@ -38,9 +55,9 @@ namespace GlobalStrings.Test
             Assert.Throws<StopedGlobalizationExeption>(() => _globalization.UpdateLang("en_us"));
         }
         [Fact]
-        public void UpdateLangNonexistentLangCodeTest()
+        public void UpdateLangNonExistentLangCodeTest()
         {
-            Globalization<string, string, int> localGlobalization = new(Consts.languageInfos, "pt_br");
+            Globalization<string, string, int> localGlobalization = new(languageInfos, "pt_br");
             localGlobalization.StartGlobalization();
             
             Assert.Throws<IncorrectLangCodeException>(() => localGlobalization.UpdateLang("en"));
@@ -55,11 +72,6 @@ namespace GlobalStrings.Test
         public void IsNotJsonFileInLoadExceptionTest()
         {
             Assert.Throws<IsNotJsonFileException>(() => _globalization.LoadLanguageInfos(INVALID_JSON_FILE));
-        }
-        
-        private void GlobalizationOnLangTextObserver(object sender, UpdateModeEventArgs updatemodeeventargs)
-        {
-            text = _globalization.SetText("Home", 0);
         }
     }
 }

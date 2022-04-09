@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using GlobalStrings.EventArguments;
 using GlobalStrings.Globalization;
-using GlobalStrings.Test.Utils;
 using GlobalStrings.Types;
 using Xunit;
 
@@ -15,6 +15,30 @@ namespace GlobalStrings.Test
         public BasicInitialTest()
         {
             StartGlobalization();
+        }
+        private void StartGlobalization()
+        {
+            LanguageInfo<string, string, int> languageInfoEnUs = new("en_us", new(new()
+            {
+                {"Home", new()
+                {
+                    { 0, "Hello" }, 
+                    { 1, "Wellcome" }  
+                }}
+            }));
+            LanguageInfo<string, string, int> languageInfoPtBr = new("pt_br", new(new()
+            {
+                { "Home", new()
+                {
+                    {0, "Olá"},
+                    {1, "Seja Bem-Vindo"}
+                }}
+            }));
+            List<LanguageInfo<string, string, int>> languageInfos = new() { languageInfoEnUs, languageInfoPtBr };
+
+            _globalization = new(languageInfos, "pt_br");
+            _globalization.LangTextObserver += Globalization_LangTextObserver;
+            _globalization.StartGlobalization();
         }
 
         [Fact]
@@ -48,26 +72,11 @@ namespace GlobalStrings.Test
         {
             _globalization.SyncStrings();
         }
-
-        private void StartGlobalization()
-        {
-            LanguageInfo<string, string, int> languageInfo = new("en_us");
-            languageInfo.textBookCollection = new();
-            languageInfo.textBookCollection.Add("Home", new()
-            {
-                { 0, "Hello" },
-                { 1, "Wellcome" }
-            });
-            
-            _globalization = new(Consts.languageInfos, "pt_br");
-            _globalization.LangTextObserver += Globalization_LangTextObserver;
-            _globalization.StartGlobalization();
-        }
-
+        
         private void Globalization_LangTextObserver(object sender, UpdateModeEventArgs updateModeEventArgs)
         {
             congrats = _globalization.SetText("Home", 0);
-            wellcome = _globalization.SetText("Home", 1);
+            wellcome = _globalization.SetText(new("Home", 1));
         }
     }
 }
