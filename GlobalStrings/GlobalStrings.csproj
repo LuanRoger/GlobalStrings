@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <PackageId>GlobalStrings</PackageId>
     <Version>0.2.2</Version>
-    <PackageVersion>0.3.2</PackageVersion>
+    <PackageVersion>0.3.3</PackageVersion>
     <Title>Global Strings</Title>
     <License>MIT</License>
     <Authors>Luan Roger</Authors>

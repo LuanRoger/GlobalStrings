@@ -33,7 +33,7 @@ namespace GlobalStrings.Globalization
         /// <summary>
         /// Get only the strings than the language will use, and dispose <c>languagesInfo</c>
         /// </summary>
-        /// <exception cref="IsNotStringByFileException"></exception>
+        /// <exception cref="IsNotStringByFileException">There is possible to use this without a json file</exception>
         private void OptimizeLangListByLangCode()
         {
             if(!stringsByFile)

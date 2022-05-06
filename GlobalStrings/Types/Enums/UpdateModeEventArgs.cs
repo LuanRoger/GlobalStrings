@@ -1,4 +1,4 @@
 ﻿namespace GlobalStrings.Types.Enums
 {
-    public enum UpdateMode { Update, Insert, Sync }
+    public enum UpdateMode { Update, Start, Sync }
 }

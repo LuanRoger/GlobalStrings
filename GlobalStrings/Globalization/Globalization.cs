@@ -6,6 +6,8 @@ using GlobalStrings.Extensions.Serialization;
 using GlobalStrings.Types;
 using GlobalStrings.Types.Enums;
 
+// ReSharper disable CoVariantArrayConversion
+
 namespace GlobalStrings.Globalization
 {
     /// <summary>
@@ -68,6 +70,30 @@ namespace GlobalStrings.Globalization
                 languagesInfo!.First(c => Equals(c.langCode, langCodeNow))
                 .textBookCollection[collectionCode][key];
         }
+
+        /// <summary>
+        /// Set the text according to the current language. Must be used in <c>LangTextObserver</c> event.
+        /// </summary>
+        /// <param name="collectionCode">Address where the string is in a collection.</param>
+        /// <param name="key">String allocation key in a collection.</param>
+        /// <param name="formatArgs">An string array that contains the text to replace in correspondent place.</param>
+        /// <returns>A string according to the current language.</returns>
+        /// <example><code>string text = globalization.SetText(0)</code></example>
+        /// <exception cref="StopedGlobalizationExeption"></exception>
+        public string SetText(GCollectionCode collectionCode, KTextCode key, params string[] formatArgs)
+        {
+            if(!hasStarted)
+                throw new StopedGlobalizationExeption();
+            if(stringsByFile && actualLanguageInfo is null)
+                throw new NullValueForDependency(nameof(stringsByFile), nameof(actualLanguageInfo));
+            if(!stringsByFile && languagesInfo is null)
+                throw new NullValueForDependency(nameof(stringsByFile), nameof(languagesInfo));
+            
+            var matchLanguageInfo = stringsByFile ? actualLanguageInfo : 
+                languagesInfo!.First(c => Equals(c.langCode, langCodeNow));
+            
+            return string.Format(matchLanguageInfo!.textBookCollection[collectionCode][key], formatArgs);
+        }
         /// <summary>
         /// Set the text according to the current language. Must be used in <c>LangTextObserver</c> event.
         /// </summary>
@@ -90,6 +116,30 @@ namespace GlobalStrings.Globalization
                 languagesInfo!.First(c => Equals(c.langCode, langCodeNow))
                     .textBookCollection[collectionCode][key];
         }
+        /// <summary>
+        /// Set the text according to the current language. Must be used in <c>LangTextObserver</c> event.
+        /// </summary>
+        /// <param name="textCode">Key pair than identify the text. Where the <c>Key</c> is the <c>GCollectionCode</c> and
+        /// <c>Value</c> is <c>KTextCode</c>.</param>
+        /// <param name="formatArgs">An string array that contains the text to replace in correspondent place.</param>
+        /// <returns>A string according to the current language.</returns>
+        /// <example><code>string text = globalization.SetText(0)</code></example>
+        /// <exception cref="StopedGlobalizationExeption"></exception>
+        public string SetText(KeyValuePair<GCollectionCode, KTextCode> textCode, params string[] formatArgs)
+        {
+            if(!hasStarted)
+                throw new StopedGlobalizationExeption();
+            if(stringsByFile && actualLanguageInfo is null)
+                throw new NullValueForDependency(nameof(stringsByFile), nameof(actualLanguageInfo));
+            if(!stringsByFile && languagesInfo is null)
+                throw new NullValueForDependency(nameof(stringsByFile), nameof(languagesInfo));
+            
+            var matchLanguageInfo = stringsByFile ? actualLanguageInfo :
+                languagesInfo!.First(c => Equals(c.langCode, langCodeNow));
+            
+            (GCollectionCode collectionCode, KTextCode key) = textCode;
+            return string.Format(matchLanguageInfo!.textBookCollection[collectionCode][key], formatArgs);
+        }
 
         /// <summary>
         /// Switch from one language to another and update all strings in <c>LangTextObserver</c> event.
@@ -109,7 +159,7 @@ namespace GlobalStrings.Globalization
             if(stringsByFile)
                 this.LoadLanguageInfos(filepath!);
             
-            LangTextObserverCall(this, new(){ mode = UpdateMode.Update, lang = newLangCode! });
+            LangTextObserverCall(this, new(UpdateMode.Update, newLangCode!));
         }
 
         /// <summary>
@@ -118,7 +168,7 @@ namespace GlobalStrings.Globalization
         public void StartGlobalization()
         {
             hasStarted = true;
-            LangTextObserverCall(this, new(){ mode = UpdateMode.Insert, lang = langCodeNow });
+            LangTextObserverCall(this,  new(UpdateMode.Start, langCodeNow));
         }
 
         /// <summary>
@@ -129,7 +179,7 @@ namespace GlobalStrings.Globalization
             if(!hasStarted)
                 throw new StopedGlobalizationExeption();
             
-            LangTextObserverCall(this, new(){ mode = UpdateMode.Sync, lang = langCodeNow });
+            LangTextObserverCall(this, new(UpdateMode.Sync, langCodeNow));
         }
     }
 }
